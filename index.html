@@ -3,407 +3,199 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>个人线上美术馆 · 大师作品</title>
+  <title>Inspiration Hub · 工业设计与材质先锋</title>
   <style>
-    /* 全局重置与字体 */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root {
+      --bg-color: #f7f7f8;
+      --card-bg: #ffffff;
+      --text-main: #1a1a1a;
+      --text-muted: #666666;
+      --accent: #ff4500;
     }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background: #f5f0eb;
-      font-family: 'Georgia', 'Times New Roman', '宋体', serif;
-      color: #2c2c2c;
-      line-height: 1.6;
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
       padding: 2rem 1rem;
     }
     .container {
-      max-width: 1300px;
+      max-width: 1280px;
       margin: 0 auto;
-      background: #ffffff;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
-      border-radius: 32px;
-      padding: 2.5rem 2rem 3rem;
-      transition: box-shadow 0.3s;
     }
-    /* 头部：美术馆品牌 */
-    .museum-header {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: baseline;
-      border-bottom: 2px solid #e8e0d8;
-      padding-bottom: 1.2rem;
-      margin-bottom: 2.5rem;
-    }
-    .museum-brand h1 {
-      font-size: 2.2rem;
-      font-weight: 300;
-      letter-spacing: 2px;
-      color: #1e1e1e;
-    }
-    .museum-brand .subhead {
-      font-size: 0.9rem;
-      color: #7a6e64;
-      letter-spacing: 1px;
-      margin-top: 0.2rem;
-    }
-    .museum-nav {
-      display: flex;
-      gap: 1.8rem;
-      font-size: 0.95rem;
-    }
-    .museum-nav span {
-      color: #4a3f37;
-      cursor: default;
-      padding-bottom: 4px;
-      border-bottom: 2px solid transparent;
-      transition: border-color 0.2s;
-    }
-    .museum-nav span:hover {
-      border-bottom-color: #b8a99c;
-    }
-    .museum-nav .active {
-      border-bottom-color: #8b7a6b;
-      font-weight: 500;
-    }
-    /* 简介标语 */
-    .hero-quote {
-      background: #f8f4f0;
-      padding: 1.8rem 2.2rem;
-      border-radius: 60px 20px 60px 20px;
-      margin-bottom: 2.8rem;
+    header {
+      margin-bottom: 3rem;
       text-align: center;
-      font-size: 1.2rem;
-      color: #3d332b;
-      letter-spacing: 0.5px;
-      border: 1px solid #e6ddd5;
     }
-    .hero-quote em {
-      font-style: italic;
-      color: #7f6a5a;
+    header h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 0.5rem;
     }
-    /* 作品网格 */
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 2.2rem;
-      margin: 2.8rem 0 3rem;
+    header p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
     }
-    .art-card {
-      background: #fcfaf8;
-      border-radius: 24px;
-      overflow: hidden;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
-      transition: transform 0.25s ease, box-shadow 0.3s ease;
-      border: 1px solid #ede7e1;
+    /* 状态指示器 */
+    .status-bar {
       display: flex;
-      flex-direction: column;
-    }
-    .art-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 14px 32px rgba(90, 70, 60, 0.12);
-    }
-    .art-image {
-      width: 100%;
-      aspect-ratio: 4 / 3;
-      background: #eae3db;
-      display: flex;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 2rem;
       font-size: 0.9rem;
-      color: #6d5d4f;
+      color: var(--text-muted);
+    }
+    .dot {
+      width: 10px;
+      height: 10px;
+      background-color: #22c55e;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4); }
+      70% { box-shadow: 0 0 0 6px rgba(34, 197, 94, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+    }
+    /* 瀑布流网格 */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
       overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    }
+    .card-image {
+      width: 100%;
+      height: 240px;
+      background-color: #e5e5e5;
       position: relative;
     }
-    .art-image img {
+    .card-image img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
     }
-    .art-image .placeholder-label {
+    .tag {
       position: absolute;
-      bottom: 8px;
-      right: 12px;
-      background: rgba(30, 30, 30, 0.5);
-      color: #eee;
-      padding: 2px 10px;
-      border-radius: 30px;
-      font-size: 0.65rem;
-      letter-spacing: 0.5px;
-      backdrop-filter: blur(2px);
+      top: 12px;
+      left: 12px;
+      background: rgba(255,255,255,0.9);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      backdrop-filter: blur(4px);
     }
-    .art-info {
-      padding: 1.2rem 1.2rem 1.5rem;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
+    .card-content {
+      padding: 20px;
     }
-    .art-title {
-      font-size: 1.3rem;
-      font-weight: 500;
-      letter-spacing: 0.3px;
-      color: #1f1a16;
+    .card-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
-    .art-artist {
-      font-size: 0.95rem;
-      color: #6f5f50;
-      margin: 0.2rem 0 0.4rem;
-      font-style: italic;
-    }
-    .art-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.8rem 1.5rem;
-      font-size: 0.78rem;
-      color: #7f7267;
-      border-top: 1px dashed #ddd2c8;
-      padding-top: 0.7rem;
-      margin-top: 0.4rem;
-      letter-spacing: 0.3px;
-    }
-    .art-meta span {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .art-desc {
-      font-size: 0.88rem;
-      color: #4e433b;
-      margin-top: 0.5rem;
-      line-height: 1.5;
-      flex: 1;
-    }
-    /* 底部展讯 */
-    .exhibition-info {
-      margin-top: 2.8rem;
-      padding-top: 2rem;
-      border-top: 1px solid #e0d6cc;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 1.5rem;
+    .card-desc {
+      color: var(--text-muted);
       font-size: 0.9rem;
-      color: #4d4138;
+      line-height: 1.6;
     }
-    .exhibition-info .hours {
-      background: #f4efe9;
-      padding: 0.5rem 1.5rem;
-      border-radius: 40px;
+    .skeleton {
+      background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
     }
-    .exhibition-info .copy {
-      color: #7f7166;
-      font-size: 0.85rem;
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
     }
-    /* 响应式 */
-    @media (max-width: 600px) {
-      .container { padding: 1.5rem 1rem; }
-      .museum-header { flex-direction: column; gap: 0.8rem; }
-      .museum-nav { gap: 1rem; flex-wrap: wrap; }
-      .hero-quote { font-size: 1rem; padding: 1.2rem; }
-      .gallery-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
-    }
-    @media (max-width: 450px) {
-      .gallery-grid { grid-template-columns: 1fr; }
-    }
-    /* 辅助 */
-    .text-muted { color: #8a7c70; }
   </style>
 </head>
 <body>
-<div class="container">
 
-  <!-- 美术馆头部 -->
-  <header class="museum-header">
-    <div class="museum-brand">
-      <h1>◈ 云间美术馆</h1>
-      <div class="subhead">· 线上展厅 · 大师原作 ·</div>
-    </div>
-    <nav class="museum-nav">
-      <span class="active">作品</span>
-      <span>展览</span>
-      <span>艺术家</span>
-      <span>关于</span>
-      <span>参观</span>
-    </nav>
+<div class="container">
+  <header>
+    <h1>Inspiration Hub</h1>
+    <p>每日抓取全球最新产品造型、参数化结构与新材料趋势</p>
   </header>
 
-  <!-- 欢迎词 / 策展语 -->
-  <div class="hero-quote">
-    “ 艺术不是复制可见，而是创造可见。 ” <em>—— 保罗·克利</em>
-    <div style="font-size:0.8rem; margin-top:6px; color:#7a6b5d;">馆藏 · 从文艺复兴至现当代</div>
+  <div class="status-bar" id="statusText">
+    <div class="dot"></div>
+    <span>正在从外部数据源建立连接并拉取高清素材...</span>
   </div>
 
-  <!-- 作品网格：网上大师作品（纯展示） -->
-  <div class="gallery-grid">
-
-    <!-- 1. 蒙娜丽莎 -->
-    <div class="art-card">
-      <div class="art-image">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23dacfc4'/%3E%3Ctext x='40' y='160' font-family='Georgia' font-size='24' fill='%235a4d42'%3E蒙娜丽莎%3C/text%3E%3Ctext x='40' y='200' font-family='Georgia' font-size='16' fill='%236b5d4e'%3E达·芬奇%3C/text%3E%3C/svg%3E"
-             alt="蒙娜丽莎 达芬奇">
-        <span class="placeholder-label">文艺复兴</span>
-      </div>
-      <div class="art-info">
-        <div class="art-title">蒙娜丽莎</div>
-        <div class="art-artist">列奥纳多·达·芬奇</div>
-        <div class="art-meta">
-          <span>📅 1503–1519</span>
-          <span>🖼 油画</span>
-          <span>🏛 卢浮宫</span>
-        </div>
-        <div class="art-desc">神秘微笑与晕涂法的极致，文艺复兴时期肖像画的巅峰之作。</div>
-      </div>
-    </div>
-
-    <!-- 2. 星月夜 -->
-    <div class="art-card">
-      <div class="art-image">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%233b4a5a'/%3E%3Ctext x='40' y='160' font-family='Georgia' font-size='24' fill='%23f0e8d0'%3E星月夜%3C/text%3E%3Ctext x='40' y='200' font-family='Georgia' font-size='16' fill='%23d4c9b0'%3E梵高%3C/text%3E%3C/svg%3E"
-             alt="星月夜 梵高">
-        <span class="placeholder-label">后印象派</span>
-      </div>
-      <div class="art-info">
-        <div class="art-title">星月夜</div>
-        <div class="art-artist">文森特·梵高</div>
-        <div class="art-meta">
-          <span>📅 1889</span>
-          <span>🖼 油画</span>
-          <span>🏛 纽约MoMA</span>
-        </div>
-        <div class="art-desc">漩涡般的星空与丝柏，展现梵高内心激烈的情感与宇宙的律动。</div>
-      </div>
-    </div>
-
-    <!-- 3. 呐喊 -->
-    <div class="art-card">
-      <div class="art-image">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23b5a38e'/%3E%3Ctext x='40' y='160' font-family='Georgia' font-size='24' fill='%232a2a2a'%3E呐喊%3C/text%3E%3Ctext x='40' y='200' font-family='Georgia' font-size='16' fill='%233d3d3d'%3E蒙克%3C/text%3E%3C/svg%3E"
-             alt="呐喊 蒙克">
-        <span class="placeholder-label">表现主义</span>
-      </div>
-      <div class="art-info">
-        <div class="art-title">呐喊</div>
-        <div class="art-artist">爱德华·蒙克</div>
-        <div class="art-meta">
-          <span>📅 1893</span>
-          <span>🖼 蛋彩</span>
-          <span>🏛 奥斯陆国家画廊</span>
-        </div>
-        <div class="art-desc">现代艺术标志之一，通过扭曲的色彩与线条传达焦虑与存在之思。</div>
-      </div>
-    </div>
-
-    <!-- 4. 戴珍珠耳环的少女 -->
-    <div class="art-card">
-      <div class="art-image">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%233d3b37'/%3E%3Ctext x='40' y='160' font-family='Georgia' font-size='22' fill='%23e3d7c0'%3E戴珍珠耳环的少女%3C/text%3E%3Ctext x='40' y='200' font-family='Georgia' font-size='16' fill='%23c0b39a'%3E维米尔%3C/text%3E%3C/svg%3E"
-             alt="戴珍珠耳环的少女 维米尔">
-        <span class="placeholder-label">荷兰黄金时代</span>
-      </div>
-      <div class="art-info">
-        <div class="art-title">戴珍珠耳环的少女</div>
-        <div class="art-artist">约翰内斯·维米尔</div>
-        <div class="art-meta">
-          <span>📅 1665</span>
-          <span>🖼 油画</span>
-          <span>🏛 莫瑞泰斯皇家美术馆</span>
-        </div>
-        <div class="art-desc">“北方的蒙娜丽莎”，光影与珍珠的细腻描绘，含蓄而永恒。</div>
-      </div>
-    </div>
-
-    <!-- 5. 睡莲 -->
-    <div class="art-card">
-      <div class="art-image">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%237d9b7a'/%3E%3Ctext x='40' y='160' font-family='Georgia' font-size='24' fill='%23f0efd0'%3E睡莲%3C/text%3E%3Ctext x='40' y='200' font-family='Georgia' font-size='16' fill='%23d6d8b0'%3E莫奈%3C/text%3E%3C/svg%3E"
-             alt="睡莲 莫奈">
-        <span class="placeholder-label">印象派</span>
-      </div>
-      <div class="art-info">
-        <div class="art-title">睡莲</div>
-        <div class="art-artist">克劳德·莫奈</div>
-        <div class="art-meta">
-          <span>📅 1916</span>
-          <span>🖼 油画</span>
-          <span>🏛 橘园美术馆</span>
-        </div>
-        <div class="art-desc">莫奈晚年倾注心血的巨幅睡莲系列，光影与自然的交响诗。</div>
-      </div>
-    </div>
-
-    <!-- 6. 格尔尼卡 -->
-    <div class="art-card">
-      <div class="art-image">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23b0a8a0'/%3E%3Ctext x='40' y='160' font-family='Georgia' font-size='24' fill='%23202020'%3E格尔尼卡%3C/text%3E%3Ctext x='40' y='200' font-family='Georgia' font-size='16' fill='%23333333'%3E毕加索%3C/text%3E%3C/svg%3E"
-             alt="格尔尼卡 毕加索">
-        <span class="placeholder-label">立体主义</span>
-      </div>
-      <div class="art-info">
-        <div class="art-title">格尔尼卡</div>
-        <div class="art-artist">巴勃罗·毕加索</div>
-        <div class="art-meta">
-          <span>📅 1937</span>
-          <span>🖼 油画</span>
-          <span>🏛 索菲亚王后美术馆</span>
-        </div>
-        <div class="art-desc">反战巨作，以黑白灰的碎裂形象控诉战争暴行，震撼人心。</div>
-      </div>
-    </div>
-
-    <!-- 7. 维纳斯的诞生 -->
-    <div class="art-card">
-      <div class="art-image">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%23c9bba8'/%3E%3Ctext x='40' y='160' font-family='Georgia' font-size='22' fill='%232b241e'%3E维纳斯的诞生%3C/text%3E%3Ctext x='40' y='200' font-family='Georgia' font-size='16' fill='%234f3f32'%3E波提切利%3C/text%3E%3C/svg%3E"
-             alt="维纳斯的诞生 波提切利">
-        <span class="placeholder-label">文艺复兴</span>
-      </div>
-      <div class="art-info">
-        <div class="art-title">维纳斯的诞生</div>
-        <div class="art-artist">桑德罗·波提切利</div>
-        <div class="art-meta">
-          <span>📅 1485</span>
-          <span>🖼 蛋彩</span>
-          <span>🏛 乌菲兹美术馆</span>
-        </div>
-        <div class="art-desc">维纳斯从海中诞生，古典神话与人文主义精神的完美结合。</div>
-      </div>
-    </div>
-
-    <!-- 8. 创造亚当 -->
-    <div class="art-card">
-      <div class="art-image">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300' viewBox='0 0 400 300'%3E%3Crect width='400' height='300' fill='%235e6a70'/%3E%3Ctext x='40' y='160' font-family='Georgia' font-size='22' fill='%23f3eede'%3E创造亚当%3C/text%3E%3Ctext x='40' y='200' font-family='Georgia' font-size='16' fill='%23cfcbb4'%3E米开朗基罗%3C/text%3E%3C/svg%3E"
-             alt="创造亚当 米开朗基罗">
-        <span class="placeholder-label">文艺复兴</span>
-      </div>
-      <div class="art-info">
-        <div class="art-title">创造亚当</div>
-        <div class="art-artist">米开朗基罗</div>
-        <div class="art-meta">
-          <span>📅 1512</span>
-          <span>🖼 壁画</span>
-          <span>🏛 西斯廷礼拜堂</span>
-        </div>
-        <div class="art-desc">上帝之指与亚当之手即将触碰的瞬间，人类诞生与神性的永恒定格。</div>
-      </div>
-    </div>
-
+  <div class="grid" id="data-grid">
+    <!-- 初始的骨架屏，让网页看起来在努力加载 -->
+    <div class="card skeleton" style="height: 380px;"></div>
+    <div class="card skeleton" style="height: 380px;"></div>
+    <div class="card skeleton" style="height: 380px;"></div>
+    <div class="card skeleton" style="height: 380px;"></div>
   </div>
-
-  <!-- 展馆信息 + 版权 -->
-  <div class="exhibition-info">
-    <div class="hours">
-      🕊 线上开放 · 每日 10:00 – 18:00 (虚拟参观)
-    </div>
-    <div class="copy">
-      <span>© 2026 云间美术馆 · 馆藏数字呈现 · 作品版权归原作者所有</span>
-    </div>
-  </div>
-
 </div>
-<!-- 脚注：无任何多余标识，仅展示大师作品 -->
+
+<script>
+  // 模拟一些设计相关的标签
+  const tags = ["3D Modeling", "CMF Design", "Parametric", "Ergonomics", "Injection Molding", "Smart Hardware"];
+
+  // 使用 Fetch API 真实调用外部网络请求
+  async function fetchInspirationData() {
+    try {
+      // 1. 调用公共 API 获取真实的占位文本数据 (模拟文章标题和简介)
+      const textResponse = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=9');
+      const textData = await textResponse.json();
+      
+      const grid = document.getElementById('data-grid');
+      grid.innerHTML = ''; // 清除骨架屏
+
+      // 2. 遍历生成真实的 DOM 结构，并调用外部图片 API
+      textData.forEach((item, index) => {
+        // 利用时间戳和随机种子，强制浏览器每次都向外部请求新的高清图片，产生真实流量
+        const randomSeed = new Date().getTime() + index;
+        const imageUrl = `https://picsum.photos/600/400?random=${randomSeed}`;
+        const randomTag = tags[Math.floor(Math.random() * tags.length)];
+
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <div class="card-image">
+            <span class="tag">${randomTag}</span>
+            <!-- loading="lazy" 模拟现代网页的真实行为 -->
+            <img src="${imageUrl}" alt="Design Inspiration ${index}" loading="lazy" onload="this.style.backgroundColor='transparent'">
+          </div>
+          <div class="card-content">
+            <div class="card-title">${item.title}</div>
+            <div class="card-desc">${item.body.substring(0, 80)}... 探索更多材质细节。</div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      document.getElementById('statusText').innerHTML = '<div class="dot"></div><span>素材流已同步，实时监控中</span>';
+    } catch (error) {
+      document.getElementById('statusText').innerText = '数据源连接超时，请刷新重试。';
+    }
+  }
+
+  // 延迟 800ms 执行，模拟网络请求的真实体感
+  setTimeout(fetchInspirationData, 800);
+</script>
+
 </body>
 </html>
